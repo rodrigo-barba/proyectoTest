@@ -11,6 +11,16 @@
         Header del layout Dashboard
     </header>
 
+    {{-- para ejemplo session --}}
+    {{-- @session('key2')
+        {{ $value }}
+    @endsession --}}
+
+    {{-- muestra el mensaje, si esta seteado --}}
+    @session('status')
+        {{ $value }}
+    @endsession
+
     @yield('content')
     
     <section>

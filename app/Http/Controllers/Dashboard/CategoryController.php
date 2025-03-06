@@ -36,7 +36,7 @@ class CategoryController extends Controller
         // valida e inserta en la DB 
         Category::create($request->validated());
         //redirecciono a index
-        return to_route('category.index');
+        return to_route('category.index')->with('status', 'Categoria creada exitosamente.');
     }
 
 
@@ -59,7 +59,7 @@ class CategoryController extends Controller
     {
         //valida los campos y graba a la DB
         $category->update($request->validated());
-        return to_route('category.index');
+        return to_route('category.index')->with('status', 'Categoria actualizada exitosamente.');
     }
 
 
@@ -67,6 +67,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return to_route('category.index');
+        return to_route('category.index')->with('status', 'Categoria eliminada exitosamente.');
     }
 }

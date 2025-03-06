@@ -14,6 +14,11 @@ class PostController extends Controller
     /** Display a listing of the resource. */
     public function index()
     {
+        // session(['key' =>'value']);
+        // session(['key2' =>'value2']);
+        // session()->forget('key2');
+        // session()->flush();
+
         $posts = Post::paginate(5); // cant registros por pagina
         return view('dashboard.post.index', compact('posts'));
 
@@ -66,7 +71,7 @@ class PostController extends Controller
         // valida e inserta en la DB 
         Post::create($request->validated());
         //redirecciono a index
-        return to_route('post.index');
+        return to_route('post.index')->with('status', 'Post creado exitosamente.');
 
         //valida los datos del formulario
         // $request->validate([
@@ -134,7 +139,7 @@ class PostController extends Controller
         }
 
         $post->update($data);
-        return to_route('post.index');
+        return to_route('post.index')->with('status', 'Post actualizado exitosamente.');
     }
 
 
@@ -142,6 +147,6 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
-        return to_route('post.index');
+        return to_route('post.index')->with('status', 'Post eliminado exitosamente.');
     }
 }
