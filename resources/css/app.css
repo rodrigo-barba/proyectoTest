@@ -1,3 +1,74 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+h1 {
+    @apply text-3xl mb-2
+}
+
+/* clase table */
+.table {
+    /* table-auto: table-layout: auto, w-full: width: 100% */
+    @apply table-auto w-full
+}
+
+/* elemento th de la clase table */
+.table th {
+    @apply px-6 py-2 bg-gray-50 font-medium text-gray-500 uppercase border leading-4 tracking-widest
+}
+
+.table tr {
+    @apply border-b
+}    
+
+.table td {
+    @apply px-6 py-4 whitespace-normal
+}
+
+/* input textarea select en forms */
+.form-control {
+    @apply block rounded-sm shadow-sm bg-blue-50 w-full
+} 
+
+label {
+    @apply mt-2 block
+}
+
+/* clase generica para botones */
+.btn {
+    @apply border rounded px-3 py-2 text-white font-bold inline-block transition-all
+}
+
+.btn-primary {
+    @apply bg-blue-600 hover:bg-blue-800 border-blue-600 border-2
+}
+
+.btn-danger {
+    @apply bg-red-600 hover:bg-red-800 border-red-600 border-2
+}
+
+.btn-success {
+    @apply bg-green-600 hover:bg-green-800 border-green-600 border-2
+}
+
+.btn-warning {
+    @apply bg-yellow-600 hover:bg-yellow-800 border-yellow-600 border-2
+}
+
+/*clase generica para tarjeta */
+.card{
+    @apply p-6 rounded shadow-md
+}
+
+.card-white {
+    @apply bg-white
+}
+
+.card-success {
+    @apply bg-green-700
+}
+
+
+
+
+

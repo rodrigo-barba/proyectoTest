@@ -29,25 +29,7 @@
 
             <!-- Page Content -->
             <main>
-                <div class="container mx-auto">
-                    {{-- para ejemplo session --}}
-                {{-- @session('key2')
-                    {{-- <div class="card card-white">
-                            {{ $value }}
-                        </div>
-                    @endsession --}}
-    
-                    {{-- muestra el mensaje, si esta seteado --}}
-                    @session('status')
-                        <div class="card card-success">
-                            {{ $value }}
-                        </div>
-                    @endsession
-
-                    <div class="card card-white mt-8 mx-2">
-                        @yield('content')
-                    </div>
-                </div>
+                {{ $slot }}
             </main>
         </div>
     </body>

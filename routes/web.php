@@ -1,19 +1,29 @@
 <?php
 
-use App\Http\Controllers\Dashboard\CategoryController;
-use App\Http\Controllers\Dashboard\PostController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
-// resuelve el route del proyecto con una vista.
-// para esto usa la clase Route, indicando la URI y la funcion callback que usa el helper 'view'
-// no es necesario poner la extension del archivo ni su ruta (resourses/views/welcome.blade.php)
-// el .blade es porque usa el template engine Blade 
+use App\Http\Middleware\UserAccessDashboardMiddleware;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('post', PostController::class);
 
-Route::resource('category', CategoryController::class);
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
+Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', UserAccessDashboardMiddleware::class]], function () {
+    Route::resources([
+        'post' => App\Http\Controllers\Dashboard\PostController::class,
+        'category' => App\Http\Controllers\Dashboard\CategoryController::class
+    ]);
+    Route::get('', function () {
+        return view('dashboard');
+    })->middleware(['auth'])->name('dashboard');
+});
+
+require __DIR__.'/auth.php';

@@ -3,9 +3,9 @@
     @csrf
 
     <label for="title">Título</label>
-    <input type="text" name="title" id="title" value="{{ old('title', $category->title) }}">
+    <input class="form-control" type="text" name="title" id="title" value="{{ old('title', $category->title) }}">
 
     <label for="slug">Slug</label>
-    <input type="text" name="slug" id="slug" value="{{ old('slug', $category->slug) }}">
+    <input class="form-control" type="text" name="slug" id="slug" value="{{ old('slug', $category->slug) }}">
 
-    <button type="submit">Enviar</button>
+    <button  class="btn btn-success mt-2" type="submit">Enviar</button>

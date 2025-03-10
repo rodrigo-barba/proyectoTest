@@ -1,16 +1,17 @@
 @extends('dashboard.layout')
 
 @section('content')
+    <h1>Posteos</h1>
 
-    <a href="{{ route('post.create')}}">Crear nuevo post</a>
+    <a class="btn btn-primary my-3" href="{{ route('post.create')}}">Crear nuevo post</a>
 
-    <table>
+    <table class="table">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Title</th>
-            <th>Posted</th>
-            <th>Category</th>
+            <th>Título</th>
+            <th>Posteado</th>
+            <th>Categoría</th>
             <th>Opciones</th>
         </tr>
     </thead>
@@ -22,12 +23,12 @@
                 <td>{{$p->posted}}</td>
                 <td>{{$p->category->title}}</td>
                 <td>
-                    <a href="{{ route('post.edit', $p) }}">Editar</a>
-                    <a href="{{ route('post.show', $p) }}">Ver</a>
+                    <a class="btn btn-primary mt-2" href="{{ route('post.edit', $p) }}">Editar</a>
+                    <a class="btn btn-primary mt-2" href="{{ route('post.show', $p) }}">Ver</a>
                     <form action="{{ route('post.destroy', $p) }}" method="post">
-                        @method('DELETE');
+                        @method('DELETE')
                         @csrf
-                        <button type="submit">Borrar</button>
+                        <button class="btn btn-danger mt-2" type="submit">Borrar</button>
                     </form>
                 </td>
             </tr>
@@ -35,8 +36,9 @@
             @endforeach
     </tbody>
     </table>
-
-    {{ $posts->links() }}
+    <div class="mt-2">
+        {{ $posts->links() }}
+    </div>
 
 @endsection
 
