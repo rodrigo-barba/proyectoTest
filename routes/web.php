@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Blog\BlogController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -25,5 +26,12 @@ Route::group(['prefix' => 'dashboard', 'middleware' => ['auth', UserAccessDashbo
         return view('dashboard');
     })->middleware(['auth'])->name('dashboard');
 });
+
+Route::group(['prefix' => 'blog'], function () {
+    // ruta para index
+    Route::get('', [BlogController::class, 'index'])->name('blog.index');
+    Route::get('detail/{post}', [BlogController::class, 'show'])->name('blog.show');
+});
+
 
 require __DIR__.'/auth.php';
