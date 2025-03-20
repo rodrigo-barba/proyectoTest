@@ -2,10 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
+    //para poder usar el factory
+    use HasFactory;
+
     //fillable es un atributo de los modelos Eloquent que define qué campos PUEDEN SER ASIGNADOS MASIVAMENTE.
     //Si intentas insertar un campo que no está en fillable, Laravel lo ignorará o lanzará un error.
     //gracias a esto, puedo usar: Post::create(...)
