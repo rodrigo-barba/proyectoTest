@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+
+use Illuminate\Http\Request;
 use App\Http\Requests\Post\PutRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Models\Post;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -26,7 +29,8 @@ class PostController extends Controller
     /** Display a listing of the resource.    */
     public function index()
     {
-        return response()->json(Post::paginate(5)); // cant registros por pagina
+        //el with me devuelve los datos de la entidad relacionada (categoria) 
+        return response()->json(Post::with('category')->paginate(5)); // cant registros por pagina
     }
 
     /** Store a newly created resource in storage.    */
@@ -58,5 +62,26 @@ class PostController extends Controller
         $post->delete();
         // sería mejor retornar un status que un string o booleano
         return response()->json('OK');
+    }
+
+    public function upload(Request $request, Post $post) {
+        //valido tipo de archivo
+        $request->validate([
+            'image' => 'required|mimes:jpg,jpeg,png,gif|max:10240'
+        ]);
+
+        Storage::disk('public_upload')->delete("image/".$post->image);
+
+        //genero nombre del archivo
+        $filename = time() . '.' . $request->image->extension();
+        //asigno al campo image el nombre del arxhivo
+        $data['image'] = $filename;
+        //muevo el archivo a una carpeta 'image' dentro de 'public'
+        //'public' es la unica arpeta que puede acceder el usr
+        $request->image->move(public_path('image'), $filename);
+
+        //ojo! para hacer esto, image debe estar omo fillable en el modelo
+        $post->update($data);
+        return response()->json($post);
     }
 }

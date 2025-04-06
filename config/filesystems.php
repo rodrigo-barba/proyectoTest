@@ -47,6 +47,12 @@ return [
             'report' => false,
         ],
 
+        // creo carpeta para subir la imagenes de los posteos
+        'public_upload' => [
+            'driver' => 'local',
+            'root' => public_path(),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),

@@ -27,5 +27,7 @@ Route::get('post/slug/{slug}', [PostController::class, 'slug']);
 Route::apiResource('category', CategoryController::class);
 Route::apiResource('post', PostController::class);
 
+//ruta para subir archivos
+Route::post('post/upload/{post}', [PostController::class, 'upload']);
 
 

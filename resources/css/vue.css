@@ -1,0 +1,12 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+h1 {
+    /* @apply text-3xl, texto centrado, margin top y bottom  */
+    @apply text-3xl text-center my-5
+}
+
+input, textarea, select, .o-input, .o-select {
+    @apply w-full
+}
