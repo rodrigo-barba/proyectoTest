@@ -2,6 +2,8 @@
 
 // use App\Http\Controllers\Blog\BlogController;
 // use App\Http\Controllers\ProfileController;
+
+use App\Http\Controllers\LoginController;
 use Illuminate\Support\Facades\Route;
 
 // use App\Http\Middleware\UserAccessDashboardMiddleware;
@@ -15,6 +17,8 @@ Route::get('/{n1?}/{n2?}', function () {
     return view('vue');
 });
 
+// ejemplo simple login usando autenticacion SPA
+Route::post('user/login', [LoginController::class, 'authenticate']);
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -7,6 +7,27 @@
 
 <script>
 export default {
+    // mounted(){
+        //autentico con SPA
+        // axios.get('sanctum/csrf-cookie').then(res => {
+        //     // console.log('sanctum/csrf-cookie');
+        //     axios.post('/api/user/login', {
+        //         'email' : 'rodrigobarba@yahoo.com.ar',
+        //         'password' : '12345678'
+        //     }).then(res => {
+        //         console.log(res.data);
+        //     }).catch(e => {
+        //         console.log(e);
+        //     })
+        // })
+
+        //obtengo los datos del usuario autenticado para testear autenticacion
+        // axios.get('/api/user').then(res => {
+        //         console.log(res.data);
+        // })
+
+    // },
+
     data() {
         return {
             // genero un objeto llamado urls

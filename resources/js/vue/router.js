@@ -4,9 +4,15 @@ import { createRouter, createWebHashHistory, createWebHistory } from "vue-router
 //importo los componentes
 import List from "./components/ListComponent.vue";
 import Save from "./components/SaveComponent.vue";
+import Login from "./components/auth/LoginComponent.vue";
 
 // declaro el array de rutas (array de objetos)
 const routes = [
+    {
+        name: 'login',
+        path: '/login',
+        component: Login
+    },
     {
         name: 'list',
         path: '/',
