@@ -5,6 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
+/* ========================================================================== 
+    Controlador que empleamos para hacer pruebas solamente con 
+    la auth SPA de Sanctum y las rutas.api
+    tambien probamos que lo podemos consumir desde las rutas de web.php
+  ===========================================================================
+*/
+
 class LoginController extends Controller
 {
     public function authenticate(Request $request) {
@@ -34,7 +41,7 @@ class LoginController extends Controller
         }
 
         //si la autenticación falla, devuelvo un error: 422 | Unprocessable Entity
-        return response()->json('El usuario y7o contraseña son inválidos', 422);
+        return response()->json('El usuario y/o contraseña son inválidos', 422);
         
     }
 }

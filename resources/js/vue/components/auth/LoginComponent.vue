@@ -1,7 +1,9 @@
 <template>
 
+<!-- container -->
 <div class="min-h-screen flex flex-col sm:justify-center items-center bg-gray-100">
-        <div class="w-full sm:max-w-md mt-6 px-6 py-6 bg-white shadow-md overflow-hidden sm:rounded-md">
+        <!-- card -->
+        <div class="w-full sm:max-w-md px-6 py-6 bg-white shadow-md overflow-hidden sm:rounded-md">
             <!-- el prevent sirve para eviar que se ejecute el evento especificado -->
             <form @submit.prevent="submit">
                 <o-field label="Usuario" :variant="errors.login ? 'danger' : 'primary'">
@@ -11,7 +13,7 @@
                     <o-input v-model="form.password" type="password"></o-input>
                 </o-field>
 
-                <o-button variant="secondary" type="submit">Enviar</o-button>
+                <o-button class="float-right" :disabled="disabledButton" variant="secondary" type="submit">Enviar</o-button>
             </form>
         </div>
     </div>
@@ -20,18 +22,23 @@
 
 <script>
 export default {
-    // created() {
-    //     if (this.$root.isLoggedIn) {
-    //         this.$router.push({ name: 'list' })
-    //     }
-    // },
+    // created(): Es un hook del ciclo de vida de Vue que se ejecuta cuando 
+    // el componente ha sido instanciado pero antes de renderizarse.
+    // Si el usr ya tiene sesión iniciada, lo redirige directamente al listado.
+    // esto deja inaccesible el login hasta que se destruye la sesion (logout)
+    created() {  // created está por sobre mounted
+        if (this.$root.isLoggedIn) {
+            this.$router.push({ name: 'list' })
+        }
+    },
 
     data() {
         return {
-            // disabledBotton:false,
+            disabledButton: false,
+            //pongo mi usr SOLO para no estar ingresándolo para pruebas
             form: {
-                email: '',
-                password: '',
+                email: 'rodrigobarba@yahoo.com.ar',
+                password: '12345678',
             },
             errors: {
                 login: ''
@@ -45,23 +52,24 @@ export default {
         },
 
         submit() {
-            // axios.get('/api/user').then(res => {
-            //     console.log(res.data);
-            // })
-
             this.cleanErrorsForm();
-        //     this.disabledBotton=true
-            axios.get('sanctum/csrf-cookie').then(response => {
-                axios.post('/user/login', this.form).then(response => {
-                    // console.log(response.data);
-        //             this.$root.setCookieAuth({
-        //                 isLoggedIn: response.data.isLoggedIn,
-        //                 token: response.data.token,
-        //                 user: response.data.user,
-        //             })
 
-        //             setTimeout(() => (window.location.href = '/vue'), 1500)
-        //             // this.disabledBotton = false
+            // desabilito el botón para evitar que se vuelva a presionar
+            this.disabledButton = true;
+
+            axios.get('sanctum/csrf-cookie').then(response => {
+                axios.post('/api/user/login', this.form).then(response => {
+
+                    this.$root.setCookieAuth({
+                        isLoggedIn: response.data.isLoggedIn,
+                        token: response.data.token,
+                        user: response.data.user,
+                    })
+
+                    // redirecciono despues de 1,5 seg, para poder mostrar el msg de login ok
+                    setTimeout(() => (window.location.href = '/'), 1500);
+                    // una vez hecha la redirección, rehabilito el botón
+                    this.disabledButton = false;
                     // uso el componente de ORUGA para mostrar la notificacion de OK
                     this.$oruga.notification.open({
                         message: 'Login exitoso',
@@ -72,7 +80,7 @@ export default {
 
                 }).catch(error => {
                     // console.log(error);
-        //             this.disabledBotton=false
+        //             this.disabledButton=false
                     // TO DO: acá faltaria preguntar si es error de formato o autenticacion para
                     //        mostrar bien el texto del msg 
                     this.errors.login = error.response.data;

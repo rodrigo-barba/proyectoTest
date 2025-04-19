@@ -3,6 +3,8 @@ import { createApp } from "vue";  // creo la app en vue 3
 
 import Oruga from "@oruga-ui/oruga-next"  // importo la biblioteca UI
 
+import VueCookies from "vue3-cookies"
+
 import "../../css/vue.css" // importo las hojas de estilos de Vue
 import "@oruga-ui/theme-oruga/dist/oruga.css" // importo las hojas de estilos
 import "@mdi/font/css/materialdesignicons.min.css" //importo los iconos de Material Design
@@ -16,7 +18,7 @@ import router from "./router"; //importo el módulo de ruteo
 //creo una constante que recibe la aplicación creada desde 'App' (rootcomponent)
 const app = createApp(App);
 
-app.use(Oruga).use(router); //uso el plugin de oruga y el ruteo de vue
+app.use(Oruga).use(router).use(VueCookies); //uso el plugin de oruga, ruteo y cookies de vue
 
 //genero la propiedad $axios para usar Axios para llamar a la API
 app.config.globalProperties.$axios = axios;

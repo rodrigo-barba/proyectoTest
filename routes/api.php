@@ -2,14 +2,17 @@
 
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\PostController;
-use App\Models\Category;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\LoginController;
+// use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Api\UserController;
 
 // ejemplo simple login usando autenticacion SPA
-Route::post('user/login', [LoginController::class, 'authenticate']);
+// Route::post('user/login', [LoginController::class, 'authenticate']);
+// ejemplo simple login usando autenticacion con Token
+Route::post('user/login', [UserController::class, 'login']);
 
 // Ruta de ejemplo SIN AUTENTICACION
 // Route::get('/user', function (Request $request) {
@@ -42,8 +45,9 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::apiResource('post', PostController::class);
 });
 
-
 //ruta para subir archivos
 Route::post('post/upload/{post}', [PostController::class, 'upload']);
 
+//ruta logout
+Route::post('user/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 

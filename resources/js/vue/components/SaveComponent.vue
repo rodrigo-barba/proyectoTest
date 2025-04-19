@@ -1,90 +1,98 @@
+
 <template>
-    <!-- si post es null, undefined o una cadena vacía ("") -->
-    <h1 v-if="!post">Crear nuevo Posteo</h1> 
-    <h1 v-else>Editar Posteo <span class="font-bold">{{ post.title }}</span></h1>
+
+    <div class='container mx-auto'>  
+        <div class="mt-6 mb-2 px-6 py-4 bg-white shadow-md rounded-md border-solid border">
+
+            <!-- si post es null, undefined o una cadena vacía ("") -->
+            <h1 v-if="!post">Crear nuevo Posteo</h1> 
+            <h1 v-else>Editar Posteo <span class="font-bold">{{ post.title }}</span></h1>
 
 
-    <div class="grid grid-cols-2 gap-3">
-        <div class="col-span-2">
-            <o-field label="Título" :variant="errors.title ? 'danger': 'primary'" :message="errors.title">
-                <o-input v-model="form.title"></o-input>
-            </o-field>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="col-span-2">
+                    <o-field label="Título" :variant="errors.title ? 'danger': 'primary'" :message="errors.title">
+                        <o-input v-model="form.title"></o-input>
+                    </o-field>
+                </div>
+
+                <o-field label="Descripción" :variant="errors.description ? 'danger': 'primary'" :message="errors.description">
+                    <o-input v-model="form.description" type="textarea"></o-input>
+                </o-field>        
+
+                <o-field label="Contenido" :variant="errors.content ? 'danger': 'primary'" :message="errors.content">
+                    <o-input v-model="form.content" 
+                            type="textarea" 
+                            placeholder="Ingrese algún texto..."
+                            :maxlength="500"
+                            counter></o-input>
+                </o-field>        
+
+                <o-field label="Categoría" :variant="errors.category_id ? 'danger': 'primary'" :message="errors.category_id">
+                    <o-select v-model="form.category_id" placeholder="Selecciona una opción">
+                        <option value=""></option>
+                        <!-- es lo mismo escribir v-bind:key="c.id" que :key="c.id" -->
+                        <option v-for="c in categories" v-bind:key="c.id" :value="c.id">{{ c.title }}</option>
+                    </o-select>
+                </o-field>        
+
+                <o-field label="Slug" :variant="errors.slug ? 'danger': 'primary'" :message="errors.slug">
+                    <o-input v-model="form.slug"></o-input>
+                </o-field>
+
+                <o-field label="Posteado" :variant="errors.posted ? 'danger': 'primary'" :message="errors.posted">
+                    <o-select v-model="form.posted" placeholder="Selecciona una opción">
+                        <option value="yes">Sí</option>
+                        <option value="not">No</option>
+                    </o-select>
+                </o-field>
+            </div>
+
+            <div class="my-3">
+                <o-button variant="primary" @click="submit">Enviar</o-button>
+            </div>
+
+            <!-- muestro solo si tengo un post (estoy en edicion) -->
+            <div class="grid grid-cols-2 gap-3" v-if="post"> 
+                <o-field :message="fileError" :variant="fileError ? 'danger' : 'secondary'">
+                    <o-upload v-model="file">
+                        <o-button tag="upload-tag" icon-left="upload" variant="secondary">Click para elegir imagen</o-button>
+                        <!-- <o-button tag="upload-tag" variant="secondary">
+                            <o-icon icon="upload"></o-icon>
+                            <span>Click para elegir imagen</span>
+                        </o-button> -->
+                    </o-upload>
+                </o-field>
+
+                <!-- el div está para que el botón no se estire al ancho del contenedor -->
+                <div>
+                    <o-button icon-left="upload" class="file-name" variant="secondary" @click="upload">Subir imagen</o-button>
+                </div>
+            </div>
+
+            <!-- muestro solo si tengo un post (estoy en edicion) -->
+            <div class="my-3"  v-if="post">
+                <h3>Drag & Drop</h3>
+
+                <!-- aca no hay un boton para subir, porque el D&D ejecuta al soltar el archivo en el area definida
+                    cuando eso pasa, se ejecuta el metodo 'watch'  -->
+                <o-field :message="fileErrorDaD" :variant="fileErrorDaD ? 'danger' : 'secondary'">
+                    <o-upload v-model="filesDaD" multiple drag-drop>
+                        <section>
+                            <o-icon icon="upload"></o-icon>
+                            <span>Drag & Drop para subir imagenes</span>
+                        </section>
+                    </o-upload>
+                </o-field>
+
+                <!-- muestro la lista de archivos que se suben
+                    el key es para poder referenciar el elemento (ej: ane un error) y por buenas prácticas, 
+                    ya que cada elemento debe tener un id unico -->
+                <span v-for="(file, index) in filesDaD" :key="index">
+                    {{ file.name }}
+                </span>
+            </div>
         </div>
-
-        <o-field label="Descripción" :variant="errors.description ? 'danger': 'primary'" :message="errors.description">
-            <o-input v-model="form.description" type="textarea"></o-input>
-        </o-field>        
-
-        <o-field label="Contenido" :variant="errors.content ? 'danger': 'primary'" :message="errors.content">
-            <o-input v-model="form.content" 
-                     type="textarea" 
-                     placeholder="Ingrese algún texto..."
-                     :maxlength="500"
-                     counter></o-input>
-        </o-field>        
-
-        <o-field label="Categoría" :variant="errors.category_id ? 'danger': 'primary'" :message="errors.category_id">
-            <o-select v-model="form.category_id" placeholder="Selecciona una opción">
-                <option value=""></option>
-                <!-- es lo mismo escribir v-bind:key="c.id" que :key="c.id" -->
-                <option v-for="c in categories" v-bind:key="c.id" :value="c.id">{{ c.title }}</option>
-            </o-select>
-        </o-field>        
-
-        <o-field label="Slug" :variant="errors.slug ? 'danger': 'primary'" :message="errors.slug">
-            <o-input v-model="form.slug"></o-input>
-        </o-field>
-
-        <o-field label="Posteado" :variant="errors.posted ? 'danger': 'primary'" :message="errors.posted">
-            <o-select v-model="form.posted" placeholder="Selecciona una opción">
-                <option value="yes">Sí</option>
-                <option value="not">No</option>
-            </o-select>
-        </o-field>
-    </div>
-
-    <div class="my-3">
-        <o-button variant="primary" @click="submit">Enviar</o-button>
-    </div>
-
-    <!-- muestro solo si tengo un post (estoy en edicion) -->
-    <div class="grid grid-cols-2 gap-3" v-if="post"> 
-        <o-field :message="fileError" :variant="fileError ? 'danger' : 'secondary'">
-            <o-upload v-model="file">
-                <o-button tag="upload-tag" icon-left="upload" variant="secondary">Click para elegir imagen</o-button>
-                <!-- <o-button tag="upload-tag" variant="secondary">
-                    <o-icon icon="upload"></o-icon>
-                    <span>Click para elegir imagen</span>
-                </o-button> -->
-            </o-upload>
-        </o-field>
-
-        <!-- el div está para que el botón no se estire al ancho del contenedor -->
-        <div>
-            <o-button icon-left="upload" class="file-name" variant="secondary" @click="upload">Subir imagen</o-button>
-        </div>
-    </div>
-
-    <div class="my-3">
-        <h3>Drag & Drop</h3>
-
-        <!-- aca no hay un boton para subir, porque el D&D ejecuta al soltar el archivo en el area definida
-             cuando eso pasa, se ejecuta el metodo 'watch'  -->
-        <o-field :message="fileErrorDaD" :variant="fileErrorDaD ? 'danger' : 'secondary'">
-            <o-upload v-model="filesDaD" multiple drag-drop>
-                <section>
-                    <o-icon icon="upload"></o-icon>
-                    <span>Drag & Drop para subir imagenes</span>
-                </section>
-            </o-upload>
-        </o-field>
-
-        <!-- muestro la lista de archivos que se suben
-             el key es para poder referenciar el elemento (ej: ane un error) y por buenas prácticas, 
-             ya que cada elemento debe tener un id unico -->
-        <span v-for="(file, index) in filesDaD" :key="index">
-            {{ file.name }}
-        </span>
     </div>
 
 </template>
@@ -92,9 +100,16 @@
 <script>
 export default {
     async mounted() {
+        // armo el header para pasar el token 
+        const config = {
+            headers: {
+                Authorization: `Bearer ${this.$root.token}` //interpolo el token en el string
+            }
+        }
+
         //si quiero editar => paso el id del registro
         if (this.$route.params.id) {
-             this.registro = await this.$axios.get(this.$root.urls.postGET + this.$route.params.id);
+             this.registro = await axios.get(this.$root.urls.postGET + this.$route.params.id, config);
              this.post = this.registro.data;
              this.initPost();
         }
@@ -142,7 +157,7 @@ export default {
         },
 
         getCategory() {
-            this.$axios.get(this.$root.urls.categoryAllGET).then((res) => {
+            axios.get(this.$root.urls.categoryAllGET).then((res) => {
                 this.categories = res.data;
             })
         },
@@ -154,9 +169,10 @@ export default {
             const formData = new FormData();
             formData.append('image', this.file);
             //paso el id del post, el formData con el archivo a subir y los headers del request
-            this.$axios.post(this.$root.urls.postUPLOAD + this.post.id, formData, {
+            axios.post(this.$root.urls.postUPLOAD + this.post.id, formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+                     'Authorization': `Bearer ${this.$root.token}` //interpolo el token en el string
                 }
             }).then((res)=> {
                 console.log(res);
@@ -169,12 +185,19 @@ export default {
         submit() {
             this.cleanErrorsForm();
 
+            // armo el header para pasar el token 
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${this.$root.token}` //interpolo el token en el string
+                }
+            }
+
             // INSERT o UPDATE
             if (this.post == ''){
                 //CREATE
 
-                // llamo al metodo para guardar el post
-                this.$axios.post(this.$root.urls.postPOST, this.form)
+                // llamo al metodo para guardar el post y le paso el token
+                axios.post(this.$root.urls.postPOST, this.form, config)
                 .then((res) => {
                     this.$oruga.notification.open({
                         message: 'Posteo creado exitosamente.',
@@ -194,10 +217,9 @@ export default {
 
             } else {
                 //UPDATE
-                // console.log(this.post.id);
 
-                // llamo al metodo para guardar el post
-                this.$axios.patch(this.$root.urls.postPATCH + this.post.id, this.form)
+                // llamo al metodo para guardar el post y le paso el token
+                axios.patch(this.$root.urls.postPATCH + this.post.id, this.form, config)
                 .then((res) => {
                     this.$oruga.notification.open({
                         message: 'Posteo actualizado exitosamente.',
@@ -249,7 +271,8 @@ export default {
                 //paso el id del post, el formData con el archivo a subir y los headers del request
                 this.$axios.post(this.$root.urls.postUPLOAD + this.post.id, formData, {
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
+                        'Authorization': `Bearer ${this.$root.token}` //interpolo el token en el string
                     }
                 }).then((res)=> {
                     console.log(res);
