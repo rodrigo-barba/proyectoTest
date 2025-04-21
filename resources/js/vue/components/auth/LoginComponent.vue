@@ -80,7 +80,7 @@ export default {
 
                 }).catch(error => {
                     // console.log(error);
-        //             this.disabledButton=false
+                    this.disabledButton = false;
                     // TO DO: acá faltaria preguntar si es error de formato o autenticacion para
                     //        mostrar bien el texto del msg 
                     this.errors.login = error.response.data;

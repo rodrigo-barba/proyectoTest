@@ -8,6 +8,7 @@ use App\Http\Requests\Post\PutRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PostController extends Controller
 {
@@ -138,6 +139,8 @@ class PostController extends Controller
             $request->image->move(public_path('uploads/posts'), $filename);
         }
 
+        //elimino la data del Cache
+        Cache::forget('post_show_'.$post->id);
         $post->update($data);
         return to_route('post.index')->with('status', 'Post actualizado exitosamente.');
     }

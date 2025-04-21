@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Post\PutRequest;
 use App\Http\Requests\Post\StoreRequest;
 use App\Models\Post;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -15,8 +16,27 @@ class PostController extends Controller
     /** Devuelve todos los registros, sin paginar. */
     public function all()
     {
-        return response()->json(Post::get());
+        // si exite, devuelvo lo que hay en cache
+        // si no existe, cargo en cache y devuelvo lo traido de la DB
+        // le doy una validez de 10 minutos
+        return response()->json(Cache::remember('posts_index', now()->addMinutes(10), function() {
+            return Post::all();
+        }));
+
+
+        // si no exite el elemento en cache
+        // if (!cache()->has('posts_index')) {
+        //     $posts = Post::get();
+        //     cache()->put('posts_index', $posts);
+        //     return response()->json($posts);
+        // }
+        // return response()->json(cache()->get('posts_index'));
+
+
+        //sin cache
+        // return response()->json(Post::get());
     }
+
 
     /** Display the specified resource.    */
     public function slug(string $slug)

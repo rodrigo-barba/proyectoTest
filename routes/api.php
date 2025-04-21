@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\UserController;
 
 // ejemplo simple login usando autenticacion SPA
 // Route::post('user/login', [LoginController::class, 'authenticate']);
+
 // ejemplo simple login usando autenticacion con Token
 Route::post('user/login', [UserController::class, 'login']);
 
