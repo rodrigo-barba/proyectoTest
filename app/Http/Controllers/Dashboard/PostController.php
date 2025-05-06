@@ -8,7 +8,9 @@ use App\Http\Requests\Post\PutRequest;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Gate;
 
 class PostController extends Controller
 {
@@ -28,29 +30,6 @@ class PostController extends Controller
 
         // $c = Category::find(1);
         // dd($c->posts[1]->title);
-
-        // return response()->json([
-        //     'name' => 'Abigail',
-        //     'state' => 'CA',
-        // ]);
-
-        //find = select * from posts where id=1
-        //$post = Post::find(2);
-
-        // find + delete en una sola linea
-        //$post = Post::find(1)->delete();
-
-        // dd($post);  //dump & die: para depurar. (Response.Write <algo>:Response.End)
-
-        // inserta en la DB y devuelve el objeto creado
-        // $post = $post->update(
-        //     [
-        //         'title' => 'titulo actualizado',
-        //         'content' => 'content actualizado'
-        //     ]
-        // );
-
-        //return 'metodo index';
     }
 
 
@@ -70,7 +49,14 @@ class PostController extends Controller
     public function store(StoreRequest $request)
     {
         // valida e inserta en la DB 
-        Post::create($request->validated());
+        // Post::create($request->validated());
+
+        // creo un nuevo objeto Post con la data validada
+        $post = new Post($request->validated());
+        // ejecuto el save desde el metodo posts del usuario logueado
+        // para recuperar el user_id y guardarlo junto a la data enviada 
+        Auth::user()->posts()->save($post);
+
         //redirecciono a index
         return to_route('post.index')->with('status', 'Post creado exitosamente.');
 
@@ -89,8 +75,6 @@ class PostController extends Controller
         //redirecciono a index
         //return to_route('post.index');
 
-        // dd(request()->all()); 
-        // dd(request()->get('title'));
         // aca detallo cada campo, en vez de usar directamente $request->all()
         // Post::create(
         //     [
@@ -118,6 +102,10 @@ class PostController extends Controller
     /** Show the form for editing the specified resource. */
     public function edit(Post $post)
     {
+        // verifica si el usr tiene el permiso y de no ser así, 
+        // retorna el status definido en la política 
+        Gate::authorize('update', $post);
+
         //obtengo id y titulo de la categoria para trabajar
         $categories = Category::pluck('id','title');
         return view('dashboard.post.edit', compact('categories', 'post'));
@@ -141,6 +129,7 @@ class PostController extends Controller
 
         //elimino la data del Cache
         Cache::forget('post_show_'.$post->id);
+
         $post->update($data);
         return to_route('post.index')->with('status', 'Post actualizado exitosamente.');
     }
@@ -149,6 +138,10 @@ class PostController extends Controller
     /** Remove the specified resource from storage.  */
     public function destroy(Post $post)
     {
+        // verifica si el usr tiene el permiso y de no ser así, 
+        // retorna el status definido en la política 
+        Gate::authorize('delete', $post);
+
         $post->delete();
         return to_route('post.index')->with('status', 'Post eliminado exitosamente.');
     }

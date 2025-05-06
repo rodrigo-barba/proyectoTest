@@ -9,14 +9,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\UserAccessDashboardMiddleware;
 
 // landing Laravel (comento para usar las de Vue)
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/', function () {
+    return view('welcome');
+});
 
-        // Vue
-        // Route::get('/{n1?}/{n2?}', function () {
-        //     return view('vue');
-        // });
+// Vue
+// Route::get('/{n1?}/{n2?}', function () {
+//     return view('vue');
+// });
 
 // ejemplo simple login usando autenticacion SPA
 Route::post('user/login', [LoginController::class, 'authenticate']);

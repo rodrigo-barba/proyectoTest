@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -14,11 +15,12 @@ class AppServiceProvider extends ServiceProvider
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
+    /** Bootstrap any application services. */
     public function boot(): void
     {
-        //
+        //$user corresponde al usuario logueado 
+        // Gate::define('update-post', function($user, $post) {
+        //     return $user->id == $post->user_id;
+        // });
     }
 }

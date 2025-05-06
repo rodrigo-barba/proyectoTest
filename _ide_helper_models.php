@@ -48,6 +48,7 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property int $category_id
+ * @property int $user_id
  * @property-read \App\Models\Category $category
  * @method static \Database\Factories\PostFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post newModelQuery()
@@ -63,6 +64,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post whereSlug($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post whereTitle($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Post whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Post whereUserId($value)
  */
 	class Post extends \Eloquent {}
 }
@@ -82,6 +84,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Post> $posts
+ * @property-read int|null $posts_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])

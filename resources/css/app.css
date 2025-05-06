@@ -36,7 +36,8 @@ label {
 
 /* clase generica para botones */
 .btn {
-    @apply border rounded px-3 py-2 text-white font-bold inline-block transition-all
+    /* @apply border rounded px-3 py-2 text-white font-bold inline-block transition-all */
+    @apply border rounded-3xl min-w-[80px] text-center px-2 text-white font-bold inline-block transition-all
 }
 
 .btn-primary {

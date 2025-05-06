@@ -15,7 +15,7 @@ class Post extends Model
     //gracias a esto, puedo usar: Post::create(...)
     //1. Protege contra asignación masiva (Mass Assignment).
     //2. Evita que usuarios malintencionados inserten datos no permitidos.
-    protected $fillable = ['title', 'slug', 'content', 'category_id', 'description', 'posted', 'image'];
+    protected $fillable = ['title', 'slug', 'content', 'category_id', 'description', 'posted', 'image', 'user_id'];
 
     /* insert into `posts` 
         (`title`, `slug`, `content`, `category_id`, `description`, `posted`, `image`, `updated_at`, `created_at`) 

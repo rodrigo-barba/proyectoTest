@@ -23,13 +23,16 @@
                 <td>{{$p->posted}}</td>
                 <td>{{$p->category->title}}</td>
                 <td>
-                    <a class="btn btn-primary mt-2" href="{{ route('post.edit', $p) }}">Editar</a>
-                    <a class="btn btn-primary mt-2" href="{{ route('post.show', $p) }}">Ver</a>
-                    <form action="{{ route('post.destroy', $p) }}" method="post">
-                        @method('DELETE')
-                        @csrf
-                        <button class="btn btn-danger mt-2" type="submit">Borrar</button>
-                    </form>
+                    {{-- este div lo agreegué yo para que esté todo en una linea, pero en pantallas pequeñas se apilen automáticamente --}}
+                    <div style="display: flex; flex-wrap: wrap; gap: 5px; align-items: center;">
+                        <a class="btn btn-primary mt-2" href="{{ route('post.edit', $p) }}">Editar</a>
+                        <a class="btn btn-primary mt-2" href="{{ route('post.show', $p) }}">Ver</a>
+                        <form action="{{ route('post.destroy', $p) }}" method="post">
+                            @method('DELETE')
+                            @csrf
+                            <button class="btn btn-danger mt-2" type="submit">Borrar</button>
+                        </form>
+                    
                 </td>
             </tr>
 

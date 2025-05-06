@@ -34,9 +34,8 @@ class PostSeeder extends Seeder
                 'description' => "Dolores sequi quam odit ipsa consequuntur. $i",
                 'posted' => "yes",
                 //'image' =>   todavia no tengo ese valor
-
-            ]
-            );
+                'user_id' => 1
+            ]);
         }
     }
 
